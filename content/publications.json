@@ -1,0 +1,56 @@
+[
+  {
+    "id": "mpanet", "category": "gait", "title": "MPANet: Motion Pattern Aggregation Network for Gait Recognition",
+    "authors": ["Kang Ma", "Xiao Liang", "Chunshui Cao", "Guoren Wang", "Dezhi Zheng"], "corresponding": ["Dezhi Zheng"],
+    "venue": "International Journal of Computer Vision", "badge": "IJCV", "year": 2026, "volume": "134", "number": "7", "pages": "323",
+    "doi": "10.1007/s11263-026-02912-1", "url": "https://link.springer.com/article/10.1007/s11263-026-02912-1",
+    "pdf": "https://link.springer.com/content/pdf/10.1007/s11263-026-02912-1.pdf", "pdf_note": "出版社 PDF，可能需要机构访问权限", "code": "",
+    "image": "assets/publications/mpanet.webp", "image_source": "https://link.springer.com/article/10.1007/s11263-026-02912-1/figures/3",
+    "summary": "以局部运动模式与全局模式聚合为核心，学习更稳健的人体步态表征。", "type": "article"
+  },
+  {
+    "id": "prompt", "category": "gait", "title": "Learning Visual Prompt for Gait Recognition",
+    "authors": ["Kang Ma", "Ying Fu", "Chunshui Cao", "Saihui Hou", "Yongzhen Huang", "Dezhi Zheng"], "corresponding": ["Ying Fu", "Dezhi Zheng"],
+    "venue": "Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition", "badge": "CVPR", "year": 2024, "pages": "593--603",
+    "url": "https://openaccess.thecvf.com/content/CVPR2024/html/Ma_Learning_Visual_Prompt_for_Gait_Recognition_CVPR_2024_paper.html",
+    "pdf": "https://openaccess.thecvf.com/content/CVPR2024/papers/Ma_Learning_Visual_Prompt_for_Gait_Recognition_CVPR_2024_paper.pdf", "code": "",
+    "image": "assets/publications/prompt.webp", "image_source": "Paper Figure 2",
+    "summary": "利用可学习的部位级视觉提示与动态注意力，应对视角、服饰与运动状态变化。", "type": "inproceedings"
+  },
+  {
+    "id": "danet", "category": "gait", "title": "Dynamic Aggregated Network for Gait Recognition",
+    "authors": ["Kang Ma", "Ying Fu", "Dezhi Zheng", "Chunshui Cao", "Xuecai Hu", "Yongzhen Huang"], "corresponding": ["Ying Fu", "Dezhi Zheng"],
+    "venue": "Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition", "badge": "CVPR", "year": 2023, "pages": "22076--22085",
+    "url": "https://openaccess.thecvf.com/content/CVPR2023/html/Ma_Dynamic_Aggregated_Network_for_Gait_Recognition_CVPR_2023_paper.html",
+    "pdf": "https://openaccess.thecvf.com/content/CVPR2023/papers/Ma_Dynamic_Aggregated_Network_for_Gait_Recognition_CVPR_2023_paper.pdf", "code": "https://github.com/XKMar/FastGait",
+    "image": "assets/publications/danet.webp", "image_source": "Paper Figure 3",
+    "summary": "动态定位具有判别力的局部区域，再聚合时间上的运动模式，用于跨视角与跨服饰识别。", "type": "inproceedings"
+  },
+  {
+    "id": "uda", "category": "adaptation", "title": "Fine-grained Unsupervised Domain Adaptation for Gait Recognition",
+    "authors": ["Kang Ma", "Ying Fu", "Dezhi Zheng", "Yunjie Peng", "Chunshui Cao", "Yongzhen Huang"], "corresponding": ["Ying Fu", "Dezhi Zheng", "Yongzhen Huang"],
+    "venue": "Proceedings of the IEEE/CVF International Conference on Computer Vision", "badge": "ICCV", "year": 2023, "pages": "11313--11322",
+    "url": "https://openaccess.thecvf.com/content/ICCV2023/html/Ma_Fine-grained_Unsupervised_Domain_Adaptation_for_Gait_Recognition_ICCV_2023_paper.html",
+    "pdf": "https://openaccess.thecvf.com/content/ICCV2023/papers/Ma_Fine-grained_Unsupervised_Domain_Adaptation_for_Gait_Recognition_ICCV_2023_paper.pdf", "code": "",
+    "image": "assets/publications/uda.webp", "image_source": "Paper Figure 2",
+    "summary": "结合相邻视角先验、离线聚类与在线训练，将有标签源域知识迁移到无标签步态数据。", "type": "inproceedings"
+  },
+  {
+    "id": "rich", "category": "multimodal", "title": "Learning rich features for gait recognition by integrating skeletons and silhouettes",
+    "authors": ["Yunjie Peng", "Kang Ma", "Yang Zhang", "Zhiqiang He"], "corresponding": ["Zhiqiang He"],
+    "venue": "Multimedia Tools and Applications", "badge": "MTAP", "year": 2024, "volume": "83", "number": "3", "pages": "7273--7294",
+    "doi": "10.1007/s11042-023-15483-x", "url": "https://link.springer.com/article/10.1007/s11042-023-15483-x",
+    "pdf": "https://arxiv.org/pdf/2110.13408", "pdf_note": "arXiv 预印本；期刊卷期为 2024 年，在线发表于 2023 年", "code": "https://github.com/YunjiePeng/BimodalFusion",
+    "image": "assets/publications/rich.webp", "image_source": "arXiv:2110.13408v2 Figure 2",
+    "summary": "融合骨架的结构运动信息与轮廓的外观信息，学习互补的多模态身份特征。", "type": "article"
+  },
+  {
+    "id": "lmot", "category": "perception", "title": "Multi-Object Tracking in the Dark",
+    "authors": ["Xinzhe Wang", "Kang Ma", "Qiankun Liu", "Yunhao Zou", "Ying Fu"], "corresponding": ["Ying Fu"],
+    "venue": "Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition", "badge": "CVPR", "year": 2024, "pages": "382--392",
+    "url": "https://openaccess.thecvf.com/content/CVPR2024/html/Wang_Multi-Object_Tracking_in_the_Dark_CVPR_2024_paper.html",
+    "pdf": "https://openaccess.thecvf.com/content/CVPR2024/papers/Wang_Multi-Object_Tracking_in_the_Dark_CVPR_2024_paper.pdf", "code": "https://github.com/ying-fu/LMOT",
+    "image": "assets/publications/lmot.webp", "image_source": "Paper Figure 2",
+    "summary": "构建配对低照度多目标跟踪数据集，并通过退化抑制学习提高暗光场景中的跟踪能力。", "type": "inproceedings"
+  }
+]

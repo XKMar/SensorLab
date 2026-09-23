@@ -90,3 +90,15 @@ npm run build
 - 链接按钮仅接受 HTTP(S) 地址；图片路径必须存在于 assets 内。
 - 没有成员名单或新闻时显示简洁的空状态，不发布虚构成员、新闻或成果。
 - `.openai/` 仅用于原 Sites 预览，不需要上传到 GitHub。
+
+## 维护代表性论文
+
+在 `content/publications.json` 中编辑论文条目，首页与研究页同步更新。分类由 `scripts/publications.cjs` 管理：`gait`（步态表征）、`adaptation`（域适应）、`multimodal`（多模态）、`perception`（复杂环境感知）。
+
+- `authors`：按正式论文顺序填写完整姓名；`corresponding`：仅填写经论文核实的通讯作者姓名，页面自动添加下划线。
+- `image`：上传至 `assets/publications/` 的论文方法图或结果图；`image_source` 记录来源。
+- `url`：正式论文页；`pdf`：PDF 链接；`pdf_note`：预印本或访问权限说明；`code`：代码地址，尚未确认时填写空字符串。
+- `type`：`article` 或 `inproceedings`。`venue`、`year`、`volume`、`number`、`pages`、`doi` 用于生成可展开及下载的 BibTeX。
+- `id` 必须为不重复的英文小写标识。不要添加空链接或推测通讯作者。
+
+首批为经官方论文页和原文核实的六篇代表论文，并非 Google Scholar 全量导出。BiFusion 按期刊卷期使用 2024 年（在线发表为 2023 年），PDF 指向作者预印本；MPANet PDF 指向出版社，可能需要机构权限。后续可继续添加新条目，无需改页面布局。

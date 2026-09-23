@@ -1,9 +1,10 @@
 {
-  "name": "SensorLab",
-  "subtitle": "视觉与运动智能研究",
-  "description": "探索人体运动、世界模型与跨视角定位。",
+  "name": "MSense+",
+  "subtitle": "人体多模态感知与智能交互实验室",
+  "description": "MSense+ 人体多模态感知与智能交互实验室：研究人体运动、步态识别、多模态融合与复杂环境视觉感知。",
   "email": "",
-  "affiliation": "",
+  "affiliation": "北理工复杂环境科学探测中心",
   "repository": "https://github.com/XKMar/SensorLab",
-  "members": []
+  "members": [],
+  "scholar": "https://scholar.google.com/citations?user=BxbAw6UAAAAJ&hl=en"
 }
