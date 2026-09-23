@@ -1,0 +1,1 @@
+{"name":"sensorlab-website","version":"1.0.0","private":true,"scripts":{"build":"node scripts/build.cjs"},"dependencies":{"marked":"17.0.5"},"engines":{"node":">=22"}}

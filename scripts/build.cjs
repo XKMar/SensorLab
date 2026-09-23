@@ -1,0 +1,70 @@
+const fs = require('node:fs');
+const path = require('node:path');
+const { marked } = require('marked');
+const root = path.resolve(__dirname, '..');
+const out = path.join(root, 'dist');
+const site = JSON.parse(fs.readFileSync(path.join(root, 'content/site.json'), 'utf8'));
+const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function webURL(value) {
+  if (!value) return '';
+  const u = new URL(value);
+  if (!['https:', 'http:'].includes(u.protocol)) throw new Error('Only http(s) links are allowed: '+value);
+  return u.href;
+}
+// Metadata is intentionally limited to one key: value per line. Body is standard Markdown.
+function collection(name) {
+  const folder = path.join(root, 'content', name);
+  return fs.readdirSync(folder).filter(f => f.endsWith('.md')).sort().map(file => {
+    const raw = fs.readFileSync(path.join(folder, file), 'utf8').replace(/\r\n/g, '\n');
+    const match = raw.match(/^---\n([\s\S]*?)\n---\n([\s\S]*)$/);
+    if (!match) throw new Error('Missing metadata block: '+file);
+    const data = {};
+    for (const line of match[1].split('\n')) {
+      if (!line.trim() || line.trim().startsWith('#')) continue;
+      const part = line.match(/^([a-z_]+):\s*(.*)$/);
+      if (!part) throw new Error('Use one metadata field per line: '+file);
+      let value = part[2].trim();
+      if (value.startsWith('"')) value = JSON.parse(value);
+      data[part[1]] = value;
+    }
+    if (!data.title) throw new Error('Missing title: '+file);
+    data.slug = file.slice(0,-3);
+    if (!/^[a-z0-9-]+$/.test(data.slug)) throw new Error('Use lowercase ASCII filenames: '+file);
+    data.body = match[2];
+    for (const k of ['link','paper','code','project']) if (data[k]) data[k] = webURL(data[k]);
+    if (data.image && (!data.image.startsWith('assets/') || data.image.includes('..') || !fs.existsSync(path.join(root,data.image)))) throw new Error('Image must exist under assets/: '+file);
+    if (name === 'news' && (!/^\d{4}-\d{2}-\d{2}$/.test(data.date || '') || new Date(data.date+'T00:00:00Z').toISOString().slice(0,10)!==data.date)) throw new Error('Use a valid YYYY-MM-DD date: '+file);
+    return data;
+  }).filter(d=>d.published === 'true').sort((a,b)=>name==='news'?b.date.localeCompare(a.date):Number(a.order||99)-Number(b.order||99));
+}
+const news = collection('news');
+const research = collection('research');
+const routes = [['index.html','首页'],['research.html','研究'],['news.html','新闻'],['people.html','成员'],['join.html','加入我们']];
+function links(item) {return ['paper','code','project'].filter(k=>item[k]).map(k=>`<a href="${esc(item[k])}" target="_blank" rel="noopener noreferrer">${{paper:'论文',code:'代码',project:'项目主页'}[k]} ↗</a>`).join('');}
+function shell(file, title, content, active) {
+ const base = '../'.repeat(file.split('/').length-1);
+ const nav=routes.map(([url,label])=>`<a href="${base+url}"${(active||file)===url?' class="active" aria-current="page"':''}>${label}</a>`).join('');
+ const favicon = 'data:image/svg+xml,'+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><rect width="40" height="40" rx="10" fill="#1d1d1f"/><path d="M28 11H17a6 6 0 0 0 0 12h6a4 4 0 0 1 0 8H12" stroke="white" stroke-width="4" fill="none"/></svg>`);
+ const html=`<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="${esc(site.description)}"><meta name="theme-color" content="#ffffff"><title>${esc(title)} · ${esc(site.name)}</title><link rel="icon" href="${esc(favicon)}"><link rel="stylesheet" href="${base}assets/style.css"></head><body><header><div class="nav-wrap"><a class="brand" href="${base}index.html">${esc(site.name)}<small>${esc(site.subtitle)}</small></a><nav aria-label="主导航">${nav}</nav></div></header><main>${content}</main><footer><div class="footer-inner"><div><strong>${esc(site.name)} · ${esc(site.subtitle)}</strong><p>${site.affiliation?esc(site.affiliation):'实验室介绍初稿 · 正式名称与所属单位待确认'}</p></div><div class="footer-links"><a href="${base}join.html">联系与加入</a><a href="${esc(webURL(site.repository))}" target="_blank" rel="noopener noreferrer">GitHub ↗</a></div></div></footer></body></html>`;
+ fs.mkdirSync(path.dirname(path.join(out,file)),{recursive:true});fs.writeFileSync(path.join(out,file),html);
+}
+function newsList(items,base='') {
+ if(!items.length) return '<div class="empty"><strong>最新动态即将在这里发布。</strong><p>关注实验室的研究进展、学术交流与团队活动。</p></div>';
+ return items.map(n=>`<article class="news-row"><time datetime="${n.date}">${n.date.replaceAll('-','.')}</time><div><h3><a href="${esc(n.link || base+'news/'+n.slug+'.html')}"${n.link?' target="_blank" rel="noopener noreferrer"':''}>${esc(n.title)}${n.link?' ↗':''}</a></h3>${n.summary?'<p>'+esc(n.summary)+'</p>':''}</div></article>`).join('');
+}
+function researchList(items,base='') {return `<div class="research-list">${items.map(r=>`<article class="research-item">${r.image?`<a href="${base}research/${r.slug}.html"><img loading="lazy" src="${base+esc(r.image)}" alt="${esc(r.title)}"></a>`:''}<div class="eyebrow">${esc(r.category)}</div><h3><a href="${base}research/${r.slug}.html">${esc(r.title)}</a></h3><p>${esc(r.summary)}</p><a class="more" href="${base}research/${r.slug}.html">了解研究 ›</a><div class="pill-links">${links(r)}</div></article>`).join('')}</div>`;}
+function head(en,title,desc){return `<div class="page-head"><div class="eyebrow">${en}</div><h1>${title}</h1><p>${desc}</p></div>`;}
+// Generated output only. All editable source lives in content/, assets/ and scripts/.
+fs.rmSync(out,{recursive:true,force:true});fs.mkdirSync(out,{recursive:true});fs.cpSync(path.join(root,'assets'),path.join(out,'assets'),{recursive:true});fs.writeFileSync(path.join(out,'.nojekyll'),'');
+shell('index.html','首页',`<section class="hero"><img class="hero-image" src="assets/hero.jpg" width="1536" height="1024" alt="蓝色点云与轨迹构成的人体运动研究概念图"><div class="hero-content"><div class="eyebrow">PERCEPTION · MOTION · WORLD MODELS</div><h1>从视觉出发，<br>理解运动与世界。</h1><p>研究人体运动、视觉定位与世界模型，<br>连接真实观测与智能理解。</p><a href="research.html">探索我们的研究 ›</a></div><span class="caption">研究概念视觉</span></section><div class="container"><section class="intro"><h2>关于 ${esc(site.name)}</h2><p>我们关注机器如何从视觉中理解人、环境与交互。结合算法研究和真实实验，探索从运动表征、跨视角感知到世界预测的方法。</p></section><section class="section"><div class="section-head"><h2>最新动态</h2><a href="news.html">全部新闻 ›</a></div>${newsList(news.slice(0,5))}</section><section class="section"><div class="section-head"><h2>研究工作</h2><a href="research.html">全部研究 ›</a></div>${researchList(research.slice(0,3))}</section><section class="section platform-row"><div><h2>真实观测，<br>支持研究。</h2></div><div><p>将多视角视觉、运动捕捉与力学测量结合，为人体运动与交互研究提供实验基础。</p><div class="equipment"><div><h3>Vicon 运动捕捉</h3><p>高精度运动轨迹采集。</p></div><div><h3>8 机位同步 RGB</h3><p>多视角记录同一段运动。</p></div><div><h3>AMTI 三维测力台</h3><p>观察地面反作用力。</p></div><div><h3>动捕 × RGB × 机器人</h3><p>推进平台联调与交互实验。</p></div></div></div></section><section class="join-strip"><div><h2>带着你的问题，加入探索。</h2><p>对视觉、人体运动或世界模型感兴趣？从一个问题、一篇论文、一次实验开始。</p></div><a href="join.html">了解更多 ›</a></section></div>`);
+shell('news.html','新闻',`<div class="container">${head('NEWS','新闻与动态','记录研究进展、学术交流与实验室日常。')}<div class="page-body">${newsList(news)}</div></div>`);
+shell('research.html','研究',`<div class="container">${head('RESEARCH','研究工作','从人体运动与身份理解，到世界模型与跨视角定位。')}<div class="page-body">${researchList(research)}</div></div>`);
+const people = site.members.length ? `<div class="member-grid">${site.members.map(m=>{if(m.photo && (!m.photo.startsWith('assets/') || m.photo.includes('..') || !fs.existsSync(path.join(root,m.photo))))throw new Error('Member photo must exist under assets/');return `<article class="member">${m.photo?`<img class="member-avatar" src="${esc(m.photo)}" alt="${esc(m.name)}" loading="lazy">`:`<div class="member-avatar" aria-hidden="true">${esc(m.name.slice(0,1))}</div>`}<h2>${esc(m.name)}</h2><p>${esc(m.role)}</p><p>${esc(m.research)}</p>${m.url?`<a href="${esc(webURL(m.url))}" target="_blank" rel="noopener noreferrer">个人主页 ↗</a>`:''}</article>`}).join('')}</div>` : '<div class="empty"><strong>团队介绍正在整理中。</strong><p>导师、研究人员与学生成员的简介将在确认后更新。</p></div>';
+shell('people.html','成员',`<div class="container">${head('PEOPLE','团队成员','不同的专长，共同的好奇。')}<div class="page-body">${people}</div></div>`);
+shell('join.html','加入我们',`<article class="article"><div class="eyebrow">JOIN US</div><h1>一起探索，<br>值得研究的问题。</h1><p class="lead">欢迎对计算机视觉、人体运动和世界模型感兴趣的同学了解我们的研究。</p><div class="prose"><h2>从哪里开始</h2><p>选择一个感兴趣的研究方向，读一篇相关论文，尝试复现一个小实验，或整理一个你想验证的问题。</p><h2>建议准备</h2><ul><li>一份简历，介绍你的学习与项目经历。</li><li>一段研究兴趣说明：你关心什么，为什么想研究它。</li><li>能体现思考过程的项目、代码或实验记录。</li></ul><h2>联系与招生</h2>${site.email?`<p><a href="mailto:${esc(site.email)}">${esc(site.email)}</a></p>`:'<p>联系邮箱、招生对象及具体申请方式待实验室确认后公布。</p>'}</div></article>`);
+for (const [kind,items] of [['research',research],['news',news]]) for(const item of items) {
+ const base='../';
+ shell(kind+'/'+item.slug+'.html',item.title,`<article class="article"><a class="back" href="../${kind}.html">‹ 返回${kind==='news'?'新闻':'研究'}</a><h1>${esc(item.title)}</h1><div class="meta">${esc(item.date||item.category||'')}</div><p class="lead">${esc(item.summary||'')}</p><div class="pill-links">${links(item)}</div><div class="prose">${marked.parse(item.body.replaceAll('{{base}}',base))}</div></article>`,kind+'.html');
+}
+shell('404.html','页面未找到','<div class="container"><div class="page-head"><h1>页面未找到。</h1><p>这个页面可能已移动，或链接有误。</p><p><a href="index.html">返回首页 ›</a></p></div></div>');
+console.log(`Built ${6+news.length+research.length} HTML pages (${news.length} news, ${research.length} research).`);
