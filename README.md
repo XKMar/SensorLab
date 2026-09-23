@@ -93,9 +93,9 @@ npm run build
 
 ## 维护代表性论文
 
-在 `content/publications.json` 中编辑论文条目，首页与研究页同步更新。分类由 `scripts/publications.cjs` 管理：`gait`（步态表征）、`adaptation`（域适应）、`multimodal`（多模态）、`perception`（复杂环境感知）。
+在 `content/publications.json` 中编辑论文条目，首页与研究页同步更新。分类由 `scripts/publications.cjs` 管理：`motion`（人体运动与身份理解）、`localization`（跨视角匹配与精确定位）、`physiology`（人体生理信号感知）、`world`（世界模型与动作理解）。
 
-- `authors`：按正式论文顺序填写完整姓名；`corresponding`：仅填写经论文核实的通讯作者姓名，页面自动添加下划线。
+- `authors`：按正式论文顺序填写完整姓名；页面不标注通讯作者。
 - `image`：上传至 `assets/publications/` 的论文方法图或结果图；`image_source` 记录来源。
 - `url`：正式论文页；`pdf`：PDF 链接；`pdf_note`：预印本或访问权限说明；`code`：代码地址，尚未确认时填写空字符串。
 - `type`：`article` 或 `inproceedings`。`venue`、`year`、`volume`、`number`、`pages`、`doi` 用于生成可展开及下载的 BibTeX。

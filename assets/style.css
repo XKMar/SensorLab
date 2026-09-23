@@ -10,7 +10,7 @@
 
 /* Compact publication rows, matching the lab's reference layout. */
 .brand{line-height:1.25;flex-shrink:0}.brand small{display:block;margin:5px 0 0;font-size:12px;letter-spacing:.3px}
-.publication-legend{font-size:13px;color:var(--muted);margin:0 0 18px}.corresponding{text-decoration:underline;text-underline-offset:4px;text-decoration-thickness:1px}
+.publication-legend{font-size:13px;color:var(--muted);margin:0 0 18px}
 .publication-categories{display:flex;flex-wrap:wrap;gap:10px 22px;margin:0 0 30px}.publication-categories a{font-size:14px}
 .publication-group{scroll-margin-top:100px;margin:34px 0 10px}.publication-group-head h2{font-size:22px;font-weight:600;margin:0 0 6px;letter-spacing:-.5px}.publication-group-head p{color:var(--muted);font-size:14px;margin:0 0 12px}
 .publication{display:grid;grid-template-columns:160px minmax(0,1fr);gap:32px;padding:23px 0;align-items:start}.publication-info{min-width:0}

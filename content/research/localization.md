@@ -2,7 +2,7 @@
 title: 跨视角匹配与精确定位
 category: GEOLOCALIZATION
 summary: 连接无人机、地面与卫星视角，从图像检索走向精确位置估计。
-order: 3
+order: 2
 published: true
 paper:
 code:

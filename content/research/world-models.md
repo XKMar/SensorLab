@@ -2,7 +2,7 @@
 title: 世界模型与动作理解
 category: WORLD MODELS
 summary: 结合轨迹、深度、视觉特征与视频，探索动作如何引起物体响应和场景变化。
-order: 2
+order: 4
 published: true
 paper:
 code:
