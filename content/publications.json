@@ -232,9 +232,9 @@
     "pdf": "https://advanced.onlinelibrary.wiley.com/doi/pdf/10.1002/admt.70956",
     "pdf_note": "出版社 PDF，可能需要机构访问权限",
     "code": "",
-    "image": "assets/publications/headband.svg",
-    "image_source": "研究主题示意图，非论文原图",
-    "image_alt": "研究主题示意图",
+    "image": "assets/publications/headband.webp",
+    "image_source": "作者提供的论文原图：1cd7e2fd-687f-4fe4-af6c-3337cdc1a967.png",
+    "image_alt": "可穿戴前额 fNIRS 头带原理、结构与脑机接口应用图",
     "summary": "设计可穿戴前额设备，测量脑血红蛋白浓度以支持脑机接口。",
     "type": "article"
   },
